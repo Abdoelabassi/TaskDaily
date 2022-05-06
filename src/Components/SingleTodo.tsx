@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Todo } from "../module"
 import "./styles.css"
 import { AiFillEdit, AiFillDelete} from "react-icons/ai"
@@ -11,6 +11,19 @@ type Props ={
 }
 
 const SingleTodo = ({ todo, todos, setTodos }: Props) => {
+
+    const [edit, setEdit] = useState<boolean>(false)
+    const [editTodo, setEditTodo] = useState<string>(todo.todo)
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(()=>{
+
+        inputRef.current?.focus();
+
+    },[edit])
+
+
 
     const handleDone = (id:number)=>{
         setTodos(todos.map((todo)=>(
@@ -25,11 +38,22 @@ const SingleTodo = ({ todo, todos, setTodos }: Props) => {
         )))
     }
 
+    const handleEdit = (e:React.FormEvent, id:number)=>{
+        e.preventDefault();
+        setTodos(todos.map((todo)=>(
+            todo.id === id ? {...todo, todo:editTodo}: todo
+        )));
+
+        setEdit(false);
+    }
+
 
   return (
-    <div className='todos__single'>
-        {
-            todo.isDone ? (
+    <form className='todos__single' onSubmit={(e)=>handleEdit(e, todo.id)}>
+        { edit ? (
+            <input ref={inputRef} value={editTodo} className="todos__single--text" onChange={(e)=>setEditTodo(e.target.value)} ></input>
+
+        ):todo.isDone ? (
                 <s className="todos__single--text">{todo.todo}</s>
 
             ):(
@@ -39,7 +63,10 @@ const SingleTodo = ({ todo, todos, setTodos }: Props) => {
             }
 
         <div>
-            <span className="icon">
+            <span className="icon" onClick={()=>{
+            if(!edit && !todo.isDone){
+                setEdit(!edit)
+            }}}>
                 <AiFillEdit/>
             </span>
             <span className="icon" onClick={()=>handleDelete(todo.id)}>
@@ -50,7 +77,7 @@ const SingleTodo = ({ todo, todos, setTodos }: Props) => {
             </span>
         </div>
       
-    </div>
+    </form>
   )
 }
 
