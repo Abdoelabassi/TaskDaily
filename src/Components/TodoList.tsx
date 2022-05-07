@@ -16,16 +16,22 @@ interface Props{
 const TodoList = ({ todos, setTodos, completeTodo, setCompleteTodo }:Props)=> {
   return (
     <div className='container'>
-        <Droppable droppableId='TodosList'>
-            {(provided)=>(
+        <Droppable droppableId="TodosList">
+            {(provided, snapshot)=>(
 
-            <div className="todos" ref={provided.innerRef} {...provided.droppableProps} >
+            <div className={`todos ${snapshot.isDraggingOver ? "dragactive": ""}`}  
+            ref={provided.innerRef} 
+            {...provided.droppableProps} >
                 <span className="todos__heading">
                 Active Tasks
                 </span>
         {
-            todos.map((todo, index)=>(
-                <SingleTodo index={index} todo={todo} key={todo.id} todos={todos} setTodos={setTodos} />
+            todos?.map((todo, index)=>(
+                <SingleTodo index={index}
+                 todo={todo}
+                  key={todo.id} 
+                  todos={todos} 
+                  setTodos={setTodos} />
             ))}
             {provided.placeholder}
             </div>
@@ -33,15 +39,22 @@ const TodoList = ({ todos, setTodos, completeTodo, setCompleteTodo }:Props)=> {
             )}
        
         </Droppable>
-        <Droppable droppableId='TodosRemove'>
-            {(provided)=>(
-                <div className="todos remove" ref={provided.innerRef} {...provided.droppableProps}>
+        <Droppable droppableId="TodosRemove">
+            {(provided, snapshot)=>(
+                <div className={`todos  ${snapshot.isDraggingOver ? "dragcomplete": "remove"}`}
+                 ref={provided.innerRef} 
+                 {...provided.droppableProps}>
                 <span className="todos__heading">
                     Completed Tasks
                 </span>
                 {
-            todos.map((todo, index)=>(
-                <SingleTodo index={index} todo={todo} key={todo.id} todos={completeTodo} setTodos={setCompleteTodo} />
+            completeTodo?.map((todo, index)=>(
+                <SingleTodo 
+                 index={index}
+                 todo={todo} 
+                 key={todo.id}
+                 todos={completeTodo}
+                 setTodos={setCompleteTodo} />
             ))}
             {provided.placeholder}
         </div>

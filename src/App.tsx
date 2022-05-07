@@ -10,7 +10,7 @@ const App:React.FC = ()=> {
 
   const [todo, setTodo] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [completTodo, setCompletTodo] = useState<Todo[]>([]);
+  const [completeTodo, setCompleteTodo] = useState<Todo[]>([]);
 
   const handleAdd = (e:React.FormEvent)=>{
     e.preventDefault();
@@ -41,7 +41,7 @@ const App:React.FC = ()=> {
 
     let add;
     let active = todos;
-    let complete = completTodo;
+    let complete = completeTodo;
     // Source Logic
     if (source.droppableId === "TodosList") {
       add = active[source.index];
@@ -58,16 +58,16 @@ const App:React.FC = ()=> {
       complete.splice(destination.index, 0, add);
     }
 
-    setCompletTodo(complete);
-    setTodos(active);
+  setCompleteTodo(complete);
+  setTodos(active);
   };
-  
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="App">
       <span className="heading">TaskDaily</span>
       <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd}/>
-      <TodoList todos={todos} setTodos={setTodos} completeTodo={completTodo} setCompleteTodo={setCompletTodo}/>
+      <TodoList todos={todos} setTodos={setTodos} completeTodo={completeTodo} setCompleteTodo={setCompleteTodo}/>
     </div>
 
     </DragDropContext>
